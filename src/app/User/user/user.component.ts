@@ -7,7 +7,7 @@ import {ActivatedRoute} from '@angular/router';
 import { Location} from '@angular/common';
 
 @Component({
-  selector: 'page-user',
+  selector: 'app-user',
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.scss']
 })
@@ -25,7 +25,36 @@ export class UserComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
+    this.route.data.subscribe(routeData => {
+      const data = routeData.data;
+      if (data) {
+        this.user = data;
+        this.createForm(this.user.name);
+      }
+    });
   }
+
+  createForm(name: string) {
+    this.profileForm = this.fb.group({
+      name: [name, Validators.required]
+    });
+  }
+
+  save(value) {
+    this.userService.updateCurrentUser(value)
+      .then((res) => {
+        console.log(res);
+      }, err => console.log(err));
+  }
+
+  logout() {
+    this.authService.doLogout()
+      .then((res) => {
+        this.location.back();
+      }, (error) => {
+        console.log('Logout error', error);
+      });
+  }
+
 
 }

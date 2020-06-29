@@ -6,32 +6,31 @@ import { FirebaseUserModel} from '../../Core/user.model';
 @Injectable()
 export class UserResolver implements Resolve<FirebaseUserModel> {
 
-  constructor(public userService: UserService, private  router: Route) {}
+  constructor(public userService: UserService, private router: Router) { }
 
   resolve(route: ActivatedRouteSnapshot): Promise<FirebaseUserModel> {
 
-    let user = new FirebaseUserModel();
+    const user = new FirebaseUserModel();
+
     return new Promise((resolve, reject) => {
       this.userService.getCurrentUser()
         .then(res => {
-          if (res.providerData[0].providerId === 'password') {
-            user.image = 'https://via.placeholder.com/400X300';
+          if (res.providerData[0].providerId === 'password'){
+            user.image = 'https://via.placeholder.com/400x300';
             user.name = res.displayName;
             user.provider = res.providerData[0].providerId;
             return resolve(user);
-          } else {
+          }
+          else{
             user.image = res.photoURL;
             user.name = res.displayName;
             user.provider = res.providerData[0].providerId;
             return resolve(user);
           }
         }, err => {
-          // @ts-ignore
-          const booleanPromise = this.router.navigate(['/login']);
-          return reject(booleanPromise);
-          });
-
+          this.router.navigate(['/login']);
+          return reject(err);
         });
+    });
   }
-
 }

@@ -13,10 +13,10 @@ export class UserService {
     public afAuth: AngularFireAuth
   ) { }
 
-  // tslint:disable-next-line:typedef
-  getCurrentUser() {
+
+  getCurrentUser(){
     return new Promise<any>((resolve, reject) => {
-      const user = firebase.auth().onAuthStateChanged(function(user) {
+      this.afAuth.onAuthStateChanged((user) => {
         if (user) {
           resolve(user);
         } else {
@@ -26,8 +26,9 @@ export class UserService {
     });
   }
 
-  // tslint:disable-next-line:typedef
-  updateCurrentUser(value) {
+
+
+  updateCurrentUser(value){
     return new Promise<any>((resolve, reject) => {
       const user = firebase.auth().currentUser;
       user.updateProfile({
@@ -36,7 +37,7 @@ export class UserService {
       }).then(res => {
         resolve(res);
       }, err => reject(err));
-      });
+    });
   }
 
 }

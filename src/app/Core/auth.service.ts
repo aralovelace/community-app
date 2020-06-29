@@ -16,7 +16,7 @@ export class AuthService {
       });
   }
 
-  // tslint:disable-next-line:typedef
+
   doLogin(value){
     return new Promise<any>((resolve, reject) => {
       firebase.auth().signInWithEmailAndPassword(value.email, value.password)
@@ -26,7 +26,6 @@ export class AuthService {
       });
   }
 
-  // tslint:disable-next-line:typedef
   doLogout() {
     return new Promise((resolve, reject) => {
         if (firebase.auth().currentUser) {
