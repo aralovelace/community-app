@@ -2,19 +2,40 @@
 <div class="container">
   <div class="row">
     <div class="col-md-6 col-md-offset-3">
-      <form [formGroup]="registerForm">
+      <div class="m-3">
+        <label class="error">{{errorMessage}}</label>
+        <label class="success">{{successMessage}}</label>
+      </div>
+     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
         <div class="form-group">
           <label>Email Address</label>
-          <input type="email" formControlName="email" class="form-control"/>
+          <input type="email" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': submitted && er.email.errors }" />
+          <div *ngIf="submitted && er.email.errors" class="invalid-feedback">
+            <div *ngIf="er.email.errors.required">Email is required</div>
+            <div *ngIf="er.email.errors.email">Email must be a valid email address</div>
+          </div>
         </div>
 
         <div class="form-group">
           <label>Password</label>
-          <input type="password" formControlName="password" class="form-control"/>
-          <label class="error">{{errorMessage}}</label>
-          <label class="success">{{successMessage}}</label>
+          <input type="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && er.password.errors }"/>
+          <div *ngIf="submitted && er.password.errors" class="invalid-feedback">
+            <div *ngIf="er.password.errors.required">Password is required</div>
+            <div *ngIf="er.password.errors.minlength">Password must be at least 6 characters</div>
+          </div>
         </div>
-        <button type="submit" (click)="tryRegister(registerForm.value)" class="btn btn-primary">Register</button>
+
+        <div class="form-group">
+          <label>Confirm Password</label>
+          <input type="password" formControlName="confirmPassword" class="form-control" [ngClass]="{ 'is-invalid': submitted && er.confirmPassword.errors }"/>
+          <div *ngIf="submitted && er.confirmPassword.errors" class="invalid-feedback">
+            <div *ngIf="er.confirmPassword.errors.required">Confirm Password is required</div>
+            <div *ngIf="er.confirmPassword.errors.mustMatch">Password and Confirm Password must match</div>
+          </div>
+        </div>
+
+
+        <button type="submit"  class="btn btn-primary">Register</button>
       </form>
     </div>
   </div>
